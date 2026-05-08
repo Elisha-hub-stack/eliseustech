@@ -6,6 +6,7 @@ import {
   LogOut,
   Menu,
   X,
+  GraduationCap,
 } from "lucide-react";
 
 import {
@@ -20,7 +21,6 @@ function MainLayout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Mobile sidebar state
   const [sidebarOpen, setSidebarOpen] =
     useState(false);
 
@@ -37,12 +37,12 @@ function MainLayout() {
     {
       name: "Dashboard",
       path: "/",
-      icon: <LayoutDashboard size={20} />,
+      icon: <LayoutDashboard size={18} />,
     },
     {
       name: "Courses",
       path: "/courses",
-      icon: <BookOpen size={20} />,
+      icon: <BookOpen size={18} />,
     },
   ];
 
@@ -51,7 +51,7 @@ function MainLayout() {
     <div className="min-h-screen bg-gray-100 flex">
 
       {/* ========================= */}
-      {/* Overlay */}
+      {/* Mobile Overlay */}
       {/* ========================= */}
       {sidebarOpen && (
 
@@ -66,7 +66,7 @@ function MainLayout() {
       {/* Sidebar */}
       {/* ========================= */}
       <aside
-        className={`fixed md:static top-0 left-0 z-50 h-screen w-64 bg-white shadow-xl transform transition-transform duration-300 flex flex-col
+        className={`fixed md:static top-0 left-0 z-50 h-screen w-72 bg-white shadow-2xl transform transition-transform duration-300 flex flex-col
 
         ${
           sidebarOpen
@@ -78,24 +78,32 @@ function MainLayout() {
       >
 
         {/* Logo */}
-        <div className="p-6 border-b flex items-center justify-between">
+        <div className="p-6 border-b">
 
-          <div>
+          <div className="flex items-center gap-3">
 
-            <h1 className="text-2xl font-bold text-blue-600">
-              TechTutors
-            </h1>
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-3 rounded-2xl shadow-lg">
+              <GraduationCap size={28} />
+            </div>
 
-            <p className="text-sm text-gray-500 mt-1">
-              LMS Dashboard
-            </p>
+            <div>
+
+              <h1 className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
+                TechTutors
+              </h1>
+
+              <p className="text-sm text-gray-500 mt-1">
+                Learning Management System
+              </p>
+
+            </div>
 
           </div>
 
           {/* Close button mobile */}
           <button
             onClick={() => setSidebarOpen(false)}
-            className="md:hidden"
+            className="absolute top-6 right-5 md:hidden"
           >
 
             <X size={24} />
@@ -105,7 +113,7 @@ function MainLayout() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-4 space-y-2">
+        <nav className="flex-1 p-5 space-y-3">
 
           {navLinks.map((link) => {
 
@@ -120,11 +128,11 @@ function MainLayout() {
                 onClick={() =>
                   setSidebarOpen(false)
                 }
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition
+                className={`flex items-center gap-4 px-5 py-4 rounded-2xl font-medium transition-all duration-300
 
                 ${
                   isActive
-                    ? "bg-blue-600 text-white"
+                    ? "bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg"
                     : "hover:bg-gray-100 text-gray-700"
                 }`}
               >
@@ -140,12 +148,25 @@ function MainLayout() {
 
         </nav>
 
+        {/* Bottom Card */}
+        <div className="mx-5 mb-5 bg-gradient-to-r from-blue-600 to-indigo-700 text-white rounded-3xl p-5 shadow-xl">
+
+          <h3 className="text-lg font-bold">
+            Upgrade Your Skills 🚀
+          </h3>
+
+          <p className="text-sm text-blue-100 mt-2 leading-relaxed">
+            Continue learning modern tech skills and become industry ready.
+          </p>
+
+        </div>
+
         {/* Logout */}
-        <div className="p-4 border-t">
+        <div className="p-5 border-t">
 
           <button
             onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition"
+            className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3 rounded-2xl transition font-medium"
           >
 
             <LogOut size={18} />
@@ -161,19 +182,19 @@ function MainLayout() {
       {/* ========================= */}
       {/* Main Content */}
       {/* ========================= */}
-      <main className="flex-1 p-4 md:p-6">
+      <main className="flex-1 overflow-hidden">
 
-        {/* Topbar */}
-        <div className="bg-white rounded-2xl shadow p-4 mb-6 flex items-center justify-between">
+        {/* ========================= */}
+        {/* Top Navbar */}
+        {/* ========================= */}
+        <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b shadow-sm px-4 md:px-8 py-4 flex items-center justify-between">
 
           {/* Left */}
           <div className="flex items-center gap-4">
 
-            {/* Hamburger */}
+            {/* Mobile Menu */}
             <button
-              onClick={() =>
-                setSidebarOpen(true)
-              }
+              onClick={() => setSidebarOpen(true)}
               className="md:hidden"
             >
 
@@ -181,24 +202,88 @@ function MainLayout() {
 
             </button>
 
-            <div>
+            {/* Logo */}
+            <div className="hidden md:flex items-center gap-3">
 
-              <h2 className="text-xl font-bold">
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-2 rounded-xl shadow-md">
+                <GraduationCap size={22} />
+              </div>
+
+              <h2 className="text-2xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
                 TechTutors LMS
               </h2>
-
-              <p className="text-sm text-gray-500">
-                Learn modern tech skills professionally
-              </p>
 
             </div>
 
           </div>
 
-        </div>
+          {/* Center Navigation */}
+          <div className="hidden md:flex items-center gap-3 bg-gray-100 p-2 rounded-2xl shadow-inner">
 
+            {navLinks.map((link) => {
+
+              const isActive =
+                location.pathname === link.path;
+
+              return (
+
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`px-5 py-2 rounded-xl font-medium transition-all duration-300
+
+                  ${
+                    isActive
+                      ? "bg-white shadow text-blue-600"
+                      : "text-gray-600 hover:text-blue-600"
+                  }`}
+                >
+
+                  {link.name}
+
+                </Link>
+
+              );
+            })}
+
+          </div>
+
+          {/* Right */}
+          <div className="flex items-center gap-4">
+
+            {/* User */}
+            <div className="hidden sm:flex items-center gap-3 bg-gray-100 px-4 py-2 rounded-2xl">
+
+              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white flex items-center justify-center font-bold">
+                T
+              </div>
+
+              <div>
+
+                <p className="font-semibold text-sm">
+                  TechTutors Student
+                </p>
+
+                <p className="text-xs text-gray-500">
+                  Active Learner
+                </p>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </header>
+
+        {/* ========================= */}
         {/* Page Content */}
-        <Outlet />
+        {/* ========================= */}
+        <div className="p-4 md:p-8">
+
+          <Outlet />
+
+        </div>
 
       </main>
 
