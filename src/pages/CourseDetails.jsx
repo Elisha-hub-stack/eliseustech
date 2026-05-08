@@ -1,132 +1,230 @@
- import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function CourseDetails() {
+
   const { id } = useParams();
 
+  // Demo lessons
   const lessons = [
+
     {
-      title: "Introduction",
-      video: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-      content: "Welcome to this course. Let's get started!",
+      id: 1,
+      title: "Introduction to the Course",
+      duration: "10 mins",
+      video:
+        "https://www.youtube.com/embed/Ke90Tje7VS0",
     },
+
     {
-      title: "Getting Started",
-      video: "https://www.youtube.com/embed/Ke90Tje7VS0",
-      content: "In this lesson, we set up our tools.",
+      id: 2,
+      title: "HTML Fundamentals",
+      duration: "18 mins",
+      video:
+        "https://www.youtube.com/embed/qz0aGYrrlhU",
     },
+
     {
-      title: "Core Concepts",
-      video: "https://www.youtube.com/embed/w7ejDZ8SWv8",
-      content: "Here we learn the main concepts.",
+      id: 3,
+      title: "CSS Crash Course",
+      duration: "25 mins",
+      video:
+        "https://www.youtube.com/embed/yfoY53QXEnI",
     },
+
     {
-      title: "Project Build",
-      video: "https://www.youtube.com/embed/UB1O30fR-EE",
-      content: "Now we build a real project.",
+      id: 4,
+      title: "JavaScript Basics",
+      duration: "30 mins",
+      video:
+        "https://www.youtube.com/embed/W6NZfCO5SIk",
     },
+
   ];
 
-  const [activeLesson, setActiveLesson] = useState(lessons[0]);
-  const [completedLessons, setCompletedLessons] = useState([]);
+  // Active lesson
+  const [activeLesson, setActiveLesson] =
+    useState(lessons[0]);
+  
+  const [completedLessons, setCompletedLessons] =
+    useState([]);
 
-  // 🔥 LOAD FROM STORAGE
   useEffect(() => {
-    const saved = localStorage.getItem(`course-${id}`);
-    if (saved) {
-      setCompletedLessons(JSON.parse(saved));
+
+    const savedProgress =
+      localStorage.getItem(`course-${id}-progress`);
+
+    if (savedProgress) {
+
+      setCompletedLessons(
+        JSON.parse(savedProgress)
+      );
+
     }
+
   }, [id]);
 
-  // 🔥 SAVE TO STORAGE
-  useEffect(() => {
-    localStorage.setItem(
-      `course-${id}`,
-      JSON.stringify(completedLessons)
-    );
-  }, [completedLessons, id]);
+    const markLessonComplete = () => {
 
-  // Mark lesson complete
-  const markComplete = () => {
-    if (!completedLessons.includes(activeLesson.title)) {
-      setCompletedLessons([...completedLessons, activeLesson.title]);
+    // Avoid duplicates
+    if (
+      completedLessons.includes(activeLesson.id)
+    ) {
+      return;
     }
+
+    const updatedProgress = [
+      ...completedLessons,
+      activeLesson.id,
+    ];
+
+    setCompletedLessons(updatedProgress);
+
+    // Save to localStorage
+    localStorage.setItem(
+      `course-${id}-progress`,
+      JSON.stringify(updatedProgress)
+    );
   };
 
-  // Calculate progress
-  const progress = Math.round(
+    const progressPercentage = Math.round(
     (completedLessons.length / lessons.length) * 100
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-      
-      {/* Sidebar */}
-      <div className="bg-white p-4 rounded-xl shadow">
-        <h3 className="font-semibold mb-4">Lessons</h3>
 
-        {lessons.map((lesson, index) => (
-          <div
-            key={index}
-            onClick={() => setActiveLesson(lesson)}
-            className={`p-2 rounded cursor-pointer mb-2 flex justify-between ${
-              activeLesson.title === lesson.title
-                ? "bg-blue-100 text-blue-600 font-semibold"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            {lesson.title}
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-            {completedLessons.includes(lesson.title) && (
-              <span className="text-green-500">✓</span>
-            )}
-          </div>
-        ))}
-      </div>
+      {/* ========================= */}
+      {/* Video Section */}
+      {/* ========================= */}
+      <div className="lg:col-span-2">
 
-      {/* Content */}
-      <div className="md:col-span-3 bg-white p-6 rounded-xl shadow">
-        <h2 className="text-xl font-bold mb-4">
-          {activeLesson.title} (Course {id})
-        </h2>
+        {/* Video Player */}
+        <div className="bg-black rounded-3xl overflow-hidden shadow-xl">
 
-        {/* 🎥 Video */}
-        <div className="w-full h-64 md:h-96 mb-6">
           <iframe
-            className="w-full h-full rounded-lg"
+            className="w-full aspect-video"
             src={activeLesson.video}
-            title="Course Video"
-            frameBorder="0"
+            title={activeLesson.title}
             allowFullScreen
           ></iframe>
+
         </div>
 
-        {/* 📊 Progress */}
-        <div className="mb-4">
-          <div className="w-full bg-gray-200 rounded-full h-3">
-            <div
-              className="bg-green-500 h-3 rounded-full"
-              style={{ width: `${progress}%` }}
-            ></div>
+        {/* Lesson Info */}
+        <div className="bg-white rounded-3xl shadow p-6 mt-6">
+
+          <h1 className="text-3xl font-bold">
+            {activeLesson.title}
+          </h1>
+
+          <p className="text-gray-500 mt-3">
+            Learn modern web development with practical lessons and real-world examples.
+          </p>
+
+          {/* Progress bar*/}
+          <div className="mt-6">
+
+            <div className="flex justify-between mb-2">
+
+              <span className="font-medium">
+                Course Progress
+              </span>
+
+              <span className="text-blue-600 font-semibold">
+                {progressPercentage}%
+              </span>
+
+            </div>
+
+            <div className="w-full bg-gray-200 rounded-full h-3">
+
+              <div className="bg-blue-600 h-3 rounded-full style={{ width: `${progressPercentage}%` }}"></div>
+
+            </div>
+
           </div>
-          <p className="text-sm mt-1">{progress}% completed</p>
+
         </div>
 
-        {/* Content */}
-        <p className="text-gray-700 mb-6">
-          {activeLesson.content}
-        </p>
+      </div>
 
-        {/* Button */}
-        <button
-          onClick={markComplete}
-          className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition"
-        >
-          Mark as Complete
-        </button>
+      <button
+        onClick={markLessonComplete}
+        className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition">
+
+        {completedLessons.includes(activeLesson.id)
+          ? "Lesson Completed ✅"
+          : "Mark As Complete"}
+
+      </button>
+
+      {/* ========================= */}
+      {/* Lessons Sidebar */}
+      {/* ========================= */}
+      <div className="bg-white rounded-3xl shadow p-6 h-fit">
+
+        <h2 className="text-2xl font-bold mb-6">
+          Course Curriculum
+        </h2>
+
+        <div className="space-y-4">
+
+          {lessons.map((lesson) => (
+
+            <button
+              key={lesson.id}
+              onClick={() =>
+                setActiveLesson(lesson)
+              }
+              className={`w-full text-left p-4 rounded-2xl transition border
+
+              ${
+                activeLesson.id === lesson.id
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "hover:bg-gray-50 border-gray-200"
+              }`}
+            >
+
+              <div className="flex items-center justify-between">
+
+                <h3 className="font-semibold">
+                  {lesson.title}
+                </h3>
+
+                {completedLessons.includes(lesson.id) && (
+                  <span>
+                    ✅
+                  </span>
+                )}
+
+              </div>
+
+              <p
+                className={`text-sm mt-1
+
+                ${
+                  activeLesson.id === lesson.id
+                    ? "text-blue-100"
+                    : "text-gray-500"
+                }`}
+              >
+
+                {lesson.duration}
+
+              </p>
+
+            </button>
+
+          ))}
+
+        </div>
+
       </div>
 
     </div>
+
   );
 }
 
